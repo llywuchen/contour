@@ -35,10 +35,10 @@ import com.squareup.contour.solvers.SimpleAxisSolver.Point.Mid
 import com.squareup.contour.solvers.SimpleAxisSolver.Point.Min
 import com.squareup.contour.utils.toCInt
 import com.squareup.contour.utils.toCInt
-import com.squareup.contour.utils.unwrapCIntLambda
-import com.squareup.contour.utils.unwrapCIntToCIntLambda
-import com.squareup.contour.utils.unwrapCIntLambda
-import com.squareup.contour.utils.unwrapCIntToCIntLambda
+import com.squareup.contour.utils.unwrapIntLambda
+//import com.squareup.contour.utils.unwrapCIntToCIntLambda
+//import com.squareup.contour.utils.unwrapCIntLambda
+//import com.squareup.contour.utils.unwrapCIntToCIntLambda
 import com.squareup.contour.wrappers.HasDimensions
 import com.squareup.contour.wrappers.ParentGeometry
 import com.squareup.contour.wrappers.ViewDimensions
@@ -70,12 +70,12 @@ private const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT
  *  [ContourLayout] use the extension function [View.applyLayout] which is defined in the scope of [ContourLayout].
  *  [View.applyLayout] does two things. It adds the child view to your layout - if not already added - and configures
  *  the layout of the view. The configuration happens via the arguments provided to [View.applyLayout] which are an
- *  instance of a [XAxisSolver] and a [YAxisSolver]. [XAxisSolver] and [YAxisSolver] are symmetrical interfaces which tell
+ *  instance of a [AxisSolver] and a [AxisSolver]. [AxisSolver] and [AxisSolver] are symmetrical interfaces which tell
  *  Contour how to layout the child view on its x and y axes.
  *
- *  To start defining [XAxisSolver] / [YAxisSolver] use any of the position declaration functions defined in the
+ *  To start defining [AxisSolver] / [AxisSolver] use any of the position declaration functions defined in the
  *  [ContourLayout] scope. Eg: [leftTo], [rightTo], [centerHorizontallyTo], [topTo], etc. These functions will
- *  return a [XAxisSolver]/[YAxisSolver] with the minimum configuration to show your view on screen.
+ *  return a [AxisSolver]/[AxisSolver] with the minimum configuration to show your view on screen.
  *
  *  In the example above the view [starDate] could be configured with the code:
  *
@@ -89,7 +89,7 @@ private const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT
  *  implicit size, in the case of the base class [View] this would be 0 width and height.
  *
  *  In the example above there a couple things to note. First the reference to [parent] of made available within all
- *  [XAxisSolver] / [YAxisSolver] scopes. [parent] represents the parent geometry and is guaranteed to be resolved when
+ *  [AxisSolver] / [AxisSolver] scopes. [parent] represents the parent geometry and is guaranteed to be resolved when
  *  any of its methods are called. The values returned by [parent] will be in the layuot's coordinate space, where
  *  0,0 is top-left and the layout width, height will be bottom-right.
  *
@@ -113,7 +113,7 @@ private const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT
  *  regular [Int]s - and infact will compile down to native java [Int] primitives in most cases.
  *  More on inline classes: https://kotlinlang.org/docs/reference/inline-classes.html
  *
- *  In addition to siding [XAxisSolver] and [YAxisSolver] can define the width / height of the layout. In the example
+ *  In addition to siding [AxisSolver] and [AxisSolver] can define the width / height of the layout. In the example
  *  above we can hard-code a height and set a max width with:
  *
  *     starDate.applyLayout(
@@ -293,7 +293,7 @@ open class ContourLayout(
    * introduced!
    */
   fun contourWidthOf(config: (available: CInt) -> CInt) {
-    widthConfig.lambda = unwrapCIntToCIntLambda(config)
+    widthConfig.lambda = unwrapIntLambda(config)
   }
 
   /**
@@ -311,7 +311,7 @@ open class ContourLayout(
 
   /**
    * Optionally adds the receiver child [View] to the [ContourLayout] and configures its layout using the provided
-   * [XAxisSolver] and [YAxisSolver]
+   * [AxisSolver] and [AxisSolver]
    * @receiver the view to configure and optionally add to the [ContourLayout]
    * @param x configures how the [View] will be positioned and sized on the x-axis.
    * @param y configures how the [View] will be positioned and sized on the y-axis.
@@ -319,8 +319,8 @@ open class ContourLayout(
    * already added. Defaults true.
    */
   fun View.applyLayout(
-    x: XAxisSolver,
-    y: YAxisSolver,
+    x: AxisSolver,
+    y: AxisSolver,
     addToViewGroup: Boolean = true
   ) {
     val viewGroup = this@ContourLayout
@@ -334,14 +334,14 @@ open class ContourLayout(
   }
 
   /**
-   * Updates the layout configuration of receiver view with new optional [XAxisSolver] and/or [YAxisSolver]
+   * Updates the layout configuration of receiver view with new optional [AxisSolver] and/or [AxisSolver]
    * @receiver the view to configure
    * @param x configures how the [View] will be positioned and sized on the x-axis.
    * @param y configures how the [View] will be positioned and sized on the y-axis.
    */
   fun View.updateLayout(
-    x: XAxisSolver = spec().x,
-    y: YAxisSolver = spec().y
+    x: AxisSolver = spec().x,
+    y: AxisSolver = spec().y
   ) {
     val viewGroup = this@ContourLayout
     val spec = LayoutSpec(x, y)
@@ -352,8 +352,8 @@ open class ContourLayout(
 
   @Deprecated("Use updateLayout", ReplaceWith("updateLayout(x, y)"))
   fun View.updateLayoutSpec(
-    x: XAxisSolver = spec().x,
-    y: YAxisSolver = spec().y
+    x: AxisSolver = spec().x,
+    y: AxisSolver = spec().y
   ) {
     updateLayout(x, y)
   }
@@ -492,7 +492,7 @@ open class ContourLayout(
   fun minOf(
     p0: HasYPositionWithoutHeight,
     p1: HasYPositionWithoutHeight
-  ): YAxisSolver {
+  ): AxisSolver {
     p0 as AxisSolver
     p1 as AxisSolver
     return ComparisonResolver(p0, p1, MinOf)
@@ -501,7 +501,7 @@ open class ContourLayout(
   fun maxOf(
     p0: HasYPositionWithoutHeight,
     p1: HasYPositionWithoutHeight
-  ): YAxisSolver {
+  ): AxisSolver {
     p0 as AxisSolver
     p1 as AxisSolver
     return ComparisonResolver(p0, p1, MaxOf)
@@ -510,7 +510,7 @@ open class ContourLayout(
   fun minOf(
     p0: HasXPositionWithoutWidth,
     p1: HasXPositionWithoutWidth
-  ): XAxisSolver {
+  ): AxisSolver {
     p0 as AxisSolver
     p1 as AxisSolver
     return ComparisonResolver(p0, p1, MinOf)
@@ -519,15 +519,15 @@ open class ContourLayout(
   fun maxOf(
     p0: HasXPositionWithoutWidth,
     p1: HasXPositionWithoutWidth
-  ): XAxisSolver {
+  ): AxisSolver {
     p0 as AxisSolver
     p1 as AxisSolver
     return ComparisonResolver(p0, p1, MaxOf)
   }
 
   class LayoutSpec(
-    internal val x: XAxisSolver,
-    internal val y: YAxisSolver
+    internal val x: AxisSolver,
+    internal val y: AxisSolver
   ) : ViewGroup.LayoutParams(WRAP, WRAP), LayoutContainer {
 
     override lateinit var parent: Geometry
