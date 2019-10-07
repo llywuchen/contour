@@ -77,5 +77,5 @@ interface AxisSolver {
   fun clear()
 }
 
-interface XAxisSolver : AxisSolver
-interface YAxisSolver : AxisSolver
+//interface XAxisSolver : AxisSolver
+//interface YAxisSolver : AxisSolver

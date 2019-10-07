@@ -25,13 +25,13 @@ package com.squareup.contour
  * is configured incorrectly.
  */
 interface Geometry {
-  fun left(): XInt
-  fun right(): XInt
-  fun width(): XInt
-  fun centerX(): XInt
+  fun left(): CInt
+  fun right(): CInt
+  fun width(): CInt
+  fun centerX(): CInt
 
-  fun top(): YInt
-  fun bottom(): YInt
-  fun height(): YInt
-  fun centerY(): YInt
+  fun top(): CInt
+  fun bottom(): CInt
+  fun height(): CInt
+  fun centerY(): CInt
 }

@@ -19,40 +19,24 @@
 package com.squareup.contour.utils
 
 import com.squareup.contour.LayoutContainer
-import com.squareup.contour.XFloat
-import com.squareup.contour.XInt
-import com.squareup.contour.YFloat
-import com.squareup.contour.YInt
+import com.squareup.contour.CFloat
+import com.squareup.contour.CInt
 
-internal inline fun unwrapXIntToXIntLambda(
-  crossinline lambda: (XInt) -> XInt
-): (Int) -> Int =
-  { lambda(it.toXInt()).value }
 
-internal inline fun unwrapYIntToYIntLambda(
-  crossinline lambda: (YInt) -> YInt
-): (Int) -> Int =
-  { lambda(it.toYInt()).value }
+//internal inline fun unwrapCIntToCIntLambda(
+//  crossinline lambda: (CInt) -> CInt
+//): (Int) -> Int =
+//  { lambda(it.toCInt()).value }
 
-internal inline fun unwrapXIntLambda(
-  crossinline lambda: LayoutContainer.() -> XInt
+internal inline fun unwrapIntLambda(
+  crossinline lambda: LayoutContainer.() -> CInt
 ): LayoutContainer.() -> Int =
   { lambda().value }
 
-internal inline fun unwrapXFloatLambda(
-  crossinline lambda: LayoutContainer.() -> XFloat
+internal inline fun unwrapFloatLambda(
+  crossinline lambda: LayoutContainer.() -> CFloat
 ): LayoutContainer.() -> Int =
   { lambda().value.toInt() }
 
-internal inline fun unwrapYIntLambda(
-  crossinline lambda: LayoutContainer.() -> YInt
-): LayoutContainer.() -> Int =
-  { lambda().value }
 
-internal inline fun unwrapYFloatLambda(
-  crossinline lambda: LayoutContainer.() -> YFloat
-): LayoutContainer.() -> Int =
-  { lambda().value.toInt() }
-
-internal inline fun Int.toXInt() = XInt(this)
-internal inline fun Int.toYInt() = YInt(this)
+internal inline fun Int.toCInt() = CInt(this)

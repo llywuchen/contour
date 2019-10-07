@@ -6,8 +6,7 @@ import com.google.common.truth.Truth.assertThat
 import com.squareup.contour.utils.FakeTextView
 import com.squareup.contour.utils.contourLayout
 import com.squareup.contour.utils.forceRelayout
-import com.squareup.contour.utils.toXInt
-import com.squareup.contour.utils.toYInt
+import com.squareup.contour.utils.toCInt
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -51,7 +50,6 @@ class ContourTests {
       fakeImageView.applyLayout(
           leftTo { parent.left() }.widthOf {
             parent.height()
-                .toX()
           },
           topTo { parent.top() }.heightOf { parent.height() }
       )
@@ -90,8 +88,8 @@ class ContourTests {
     val view0 = View(activity)
     val view1 = View(activity)
 
-    var x0 = 10.toXInt()
-    val x1 = 20.toXInt()
+    var x0 = 10.toCInt()
+    val x1 = 20.toCInt()
 
     val layout = contourLayout(activity) {
       view0.applyLayout(
@@ -107,7 +105,7 @@ class ContourTests {
     assertThat(view0.left).isEqualTo(20)
     assertThat(view1.left).isEqualTo(10)
 
-    x0 = 30.toXInt()
+    x0 = 30.toCInt()
     layout.forceRelayout()
 
     assertThat(view0.left).isEqualTo(30)
@@ -119,8 +117,8 @@ class ContourTests {
     val view0 = View(activity)
     val view1 = View(activity)
 
-    var y0 = 10.toYInt()
-    val y1 = 20.toYInt()
+    var y0 = 10.toCInt()
+    val y1 = 20.toCInt()
 
     val layout = contourLayout(activity) {
       view0.applyLayout(
@@ -136,7 +134,7 @@ class ContourTests {
     assertThat(view0.top).isEqualTo(20)
     assertThat(view1.top).isEqualTo(10)
 
-    y0 = 30.toYInt()
+    y0 = 30.toCInt()
     layout.forceRelayout()
 
     assertThat(view0.top).isEqualTo(30)
