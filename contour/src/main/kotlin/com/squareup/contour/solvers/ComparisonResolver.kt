@@ -26,7 +26,7 @@ internal class ComparisonResolver(
   private val p0: AxisSolver,
   private val p1: AxisSolver,
   private val compareBy: CompareBy
-) : XAxisSolver, YAxisSolver {
+) : AxisSolver {
 
   internal enum class CompareBy {
     MaxOf,

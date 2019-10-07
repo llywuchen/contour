@@ -37,7 +37,7 @@ import com.squareup.contour.utils.toCInt
 import com.squareup.contour.utils.toCInt
 import com.squareup.contour.utils.unwrapIntLambda
 //import com.squareup.contour.utils.unwrapCIntToCIntLambda
-//import com.squareup.contour.utils.unwrapCIntLambda
+import com.squareup.contour.utils.unwrapCIntLambda
 //import com.squareup.contour.utils.unwrapCIntToCIntLambda
 import com.squareup.contour.wrappers.HasDimensions
 import com.squareup.contour.wrappers.ParentGeometry
@@ -293,7 +293,7 @@ open class ContourLayout(
    * introduced!
    */
   fun contourWidthOf(config: (available: CInt) -> CInt) {
-    widthConfig.lambda = unwrapIntLambda(config)
+    widthConfig.lambda = unwrapCIntLambda(config)
   }
 
   /**
@@ -306,7 +306,7 @@ open class ContourLayout(
    * introduced!
    */
   fun contourHeightOf(config: (available: CInt) -> CInt) {
-    heightConfig.lambda = unwrapCIntToCIntLambda(config)
+    heightConfig.lambda = unwrapCIntLambda(config)
   }
 
   /**
@@ -430,43 +430,43 @@ open class ContourLayout(
   fun baselineTo(provider: LayoutContainer.() -> CInt): HeightOfOnlyContext =
     SimpleAxisSolver(
         point = Baseline,
-        lambda = unwrapCIntLambda(provider)
+        lambda = unwrapIntLambda(provider)
     )
 
   fun topTo(provider: LayoutContainer.() -> CInt): HasTop =
     SimpleAxisSolver(
         point = Min,
-        lambda = unwrapCIntLambda(provider)
+        lambda = unwrapIntLambda(provider)
     )
 
   fun bottomTo(provider: LayoutContainer.() -> CInt): HasBottom =
     SimpleAxisSolver(
         point = Max,
-        lambda = unwrapCIntLambda(provider)
+        lambda = unwrapIntLambda(provider)
     )
 
   fun centerVerticallyTo(provider: LayoutContainer.() -> CInt): HeightOfOnlyContext =
     SimpleAxisSolver(
         point = Mid,
-        lambda = unwrapCIntLambda(provider)
+        lambda = unwrapIntLambda(provider)
     )
 
   fun leftTo(provider: LayoutContainer.() -> CInt): HasLeft =
     SimpleAxisSolver(
         point = Min,
-        lambda = unwrapCIntLambda(provider)
+        lambda = unwrapIntLambda(provider)
     )
 
   fun rightTo(provider: LayoutContainer.() -> CInt): HasRight =
     SimpleAxisSolver(
         point = Max,
-        lambda = unwrapCIntLambda(provider)
+        lambda = unwrapIntLambda(provider)
     )
 
   fun centerHorizontallyTo(provider: LayoutContainer.() -> CInt): WidthOfOnlyContext =
     SimpleAxisSolver(
         point = Mid,
-        lambda = unwrapCIntLambda(provider)
+        lambda = unwrapIntLambda(provider)
     )
 
 //  fun minOf(

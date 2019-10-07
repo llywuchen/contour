@@ -23,10 +23,10 @@ import com.squareup.contour.CFloat
 import com.squareup.contour.CInt
 
 
-//internal inline fun unwrapCIntToCIntLambda(
-//  crossinline lambda: (CInt) -> CInt
-//): (Int) -> Int =
-//  { lambda(it.toCInt()).value }
+internal inline fun unwrapCIntLambda(
+  crossinline lambda: (CInt) -> CInt
+): (Int) -> Int =
+  { lambda(it.toCInt()).value }
 
 internal inline fun unwrapIntLambda(
   crossinline lambda: LayoutContainer.() -> CInt
