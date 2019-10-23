@@ -73,12 +73,12 @@ class SampleView2(context: SampleActivity) : ContourLayout(context) {
         leftTo {
           parent.left() + 15.dip
         }.widthOf {
-          50.xdip
+          50.dip
         },
         topTo {
           parent.top() + 15.dip
         }.heightOf {
-          50.ydip
+          50.dip
         }
     )
     name.applyLayout(

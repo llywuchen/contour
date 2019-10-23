@@ -19,24 +19,24 @@
 package com.squareup.contour.utils
 
 import com.squareup.contour.LayoutContainer
-import com.squareup.contour.CFloat
-import com.squareup.contour.CInt
+//import com.squareup.contour.CFloat
+//import com.squareup.contour.CInt
 
-
-internal inline fun unwrapCIntLambda(
-  crossinline lambda: (CInt) -> CInt
-): (Int) -> Int =
-  { lambda(it.toCInt()).value }
 
 internal inline fun unwrapIntLambda(
-  crossinline lambda: LayoutContainer.() -> CInt
+  crossinline lambda: (Int) -> Int
+): (Int) -> Int =
+  { lambda(it) }
+
+internal inline fun unwrapLayoutIntLambda(
+  crossinline lambda: LayoutContainer.() -> Int
 ): LayoutContainer.() -> Int =
-  { lambda().value }
+  { lambda() }
 
 internal inline fun unwrapFloatLambda(
-  crossinline lambda: LayoutContainer.() -> CFloat
+  crossinline lambda: LayoutContainer.() -> Float
 ): LayoutContainer.() -> Int =
-  { lambda().value.toInt() }
+  { lambda().toInt() }
 
 
-internal inline fun Int.toCInt() = CInt(this)
+//internal inline fun Int.toCInt() = CInt(this)

@@ -17,23 +17,23 @@
 package com.squareup.contour.wrappers
 
 import com.squareup.contour.Geometry
-import com.squareup.contour.CInt
+//import com.squareup.contour.CInt
 //import com.squareup.contour.CInt
 import com.squareup.contour.constraints.SizeConfig
 //import com.squareup.contour.utils.toCInt
-import com.squareup.contour.utils.toCInt
+//import com.squareup.contour.utils.toCInt
 
 internal class ParentGeometry(
   private val widthConfig: SizeConfig,
   private val heightConfig: SizeConfig
 ) : Geometry {
-  override fun left(): CInt = CInt.ZERO
-  override fun right(): CInt = widthConfig.resolve().toCInt()
-  override fun width(): CInt = widthConfig.resolve().toCInt()
-  override fun centerX(): CInt = (widthConfig.resolve() / 2).toCInt()
+  override fun left(): Int = 0
+  override fun right(): Int = widthConfig.resolve()
+  override fun width(): Int = widthConfig.resolve()
+  override fun centerX(): Int = (widthConfig.resolve() / 2)
 
-  override fun top(): CInt = CInt.ZERO
-  override fun bottom(): CInt = heightConfig.resolve().toCInt()
-  override fun height(): CInt = heightConfig.resolve().toCInt()
-  override fun centerY(): CInt = heightConfig.resolve().toCInt() / 2
+  override fun top(): Int = 0
+  override fun bottom(): Int = heightConfig.resolve()
+  override fun height(): Int = heightConfig.resolve()
+  override fun centerY(): Int = heightConfig.resolve() / 2
 }

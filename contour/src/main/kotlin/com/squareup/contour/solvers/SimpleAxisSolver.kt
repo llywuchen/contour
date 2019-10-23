@@ -26,13 +26,12 @@ import com.squareup.contour.HeightOfOnlyContext
 import com.squareup.contour.LayoutContainer
 import com.squareup.contour.SizeMode
 import com.squareup.contour.WidthOfOnlyContext
-import com.squareup.contour.CFloat
 //import com.squareup.contour.CInt
 //import com.squareup.contour.CFloat
-import com.squareup.contour.CInt
 import com.squareup.contour.constraints.Constraint
 import com.squareup.contour.constraints.PositionConstraint
 import com.squareup.contour.utils.unwrapFloatLambda
+import com.squareup.contour.utils.unwrapLayoutIntLambda
 import com.squareup.contour.utils.unwrapIntLambda
 //import com.squareup.contour.utils.unwrapCFloatLambda
 //import com.squareup.contour.utils.unwrapCIntLambda
@@ -190,17 +189,17 @@ internal class SimpleAxisSolver(
 
   override fun leftTo(
     mode: SizeMode,
-    provider: LayoutContainer.() -> CInt
+    provider: LayoutContainer.() ->Int
   ): AxisSolver {
     p1.point = Point.Min
     p1.mode = mode
-    p1.lambda = unwrapIntLambda(provider)
+    p1.lambda = unwrapLayoutIntLambda(provider)
     return this
   }
 
   override fun leftToFloat(
     mode: SizeMode,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver {
     p1.point = Point.Min
     p1.mode = mode
@@ -210,17 +209,17 @@ internal class SimpleAxisSolver(
 
   override fun topTo(
     mode: SizeMode,
-    provider: LayoutContainer.() -> CInt
+    provider: LayoutContainer.() ->Int
   ): AxisSolver {
     p1.point = Point.Min
     p1.mode = mode
-    p1.lambda = unwrapIntLambda(provider)
+    p1.lambda = unwrapLayoutIntLambda(provider)
     return this
   }
 
   override fun topToFloat(
     mode: SizeMode,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver {
     p1.point = Point.Min
     p1.mode = mode
@@ -228,16 +227,16 @@ internal class SimpleAxisSolver(
     return this
   }
 
-  override fun rightTo(mode: SizeMode, provider: LayoutContainer.() -> CInt): AxisSolver {
+  override fun rightTo(mode: SizeMode, provider: LayoutContainer.() ->Int): AxisSolver {
     p1.point = Point.Max
     p1.mode = mode
-    p1.lambda = unwrapIntLambda(provider)
+    p1.lambda = unwrapLayoutIntLambda(provider)
     return this
   }
 
   override fun rightToFloat(
     mode: SizeMode,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver {
     p1.point = Point.Max
     p1.mode = mode
@@ -247,17 +246,17 @@ internal class SimpleAxisSolver(
 
   override fun bottomTo(
     mode: SizeMode,
-    provider: LayoutContainer.() -> CInt
+    provider: LayoutContainer.() ->Int
   ): AxisSolver {
     p1.point = Point.Mid
     p1.mode = mode
-    p1.lambda = unwrapIntLambda(provider)
+    p1.lambda = unwrapLayoutIntLambda(provider)
     return this
   }
 
   override fun bottomToFloat(
     mode: SizeMode,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver {
     p1.point = Point.Mid
     p1.mode = mode
@@ -265,15 +264,15 @@ internal class SimpleAxisSolver(
     return this
   }
 
-  override fun widthOf(mode: SizeMode, provider: LayoutContainer.() -> CInt): AxisSolver {
+  override fun widthOf(mode: SizeMode, provider: LayoutContainer.() ->Int): AxisSolver {
     size.mode = mode
-    size.lambda = unwrapIntLambda(provider)
+    size.lambda = unwrapLayoutIntLambda(provider)
     return this
   }
 
   override fun widthOfFloat(
     mode: SizeMode,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver {
     size.mode = mode
     size.lambda = unwrapFloatLambda(provider)
@@ -282,16 +281,16 @@ internal class SimpleAxisSolver(
 
   override fun heightOf(
     mode: SizeMode,
-    provider: LayoutContainer.() -> CInt
+    provider: LayoutContainer.() ->Int
   ): AxisSolver {
     size.mode = mode
-    size.lambda = unwrapIntLambda(provider)
+    size.lambda = unwrapLayoutIntLambda(provider)
     return this
   }
 
   override fun heightOfFloat(
     mode: SizeMode,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver {
     size.mode = mode
     size.lambda = unwrapFloatLambda(provider)

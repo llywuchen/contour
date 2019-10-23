@@ -31,71 +31,71 @@ interface HeightOfOnlyContext : AxisSolver, HasYPositionWithoutHeight
 interface HasXPositionWithoutWidth {
   fun widthOf(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CInt
+    provider: LayoutContainer.() -> Int
   ): AxisSolver
 
   fun widthOfFloat(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver
 }
 
 interface HasYPositionWithoutHeight {
   fun heightOf(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CInt
+    provider: LayoutContainer.() -> Int
   ): AxisSolver
 
   fun heightOfFloat(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver
 }
 
 interface HasLeft : AxisSolver, HasXPositionWithoutWidth {
   fun rightTo(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CInt
+    provider: LayoutContainer.() -> Int
   ): AxisSolver
 
   fun rightToFloat(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver
 }
 
 interface HasRight : AxisSolver, HasXPositionWithoutWidth {
   fun leftTo(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CInt
+    provider: LayoutContainer.() -> Int
   ): AxisSolver
 
   fun leftToFloat(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver
 }
 
 interface HasTop : AxisSolver, HasYPositionWithoutHeight {
   fun bottomTo(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CInt
+    provider: LayoutContainer.() -> Int
   ): AxisSolver
 
   fun bottomToFloat(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver
 }
 
 interface HasBottom : AxisSolver, HasYPositionWithoutHeight {
   fun topTo(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CInt
+    provider: LayoutContainer.() -> Int
   ): AxisSolver
 
   fun topToFloat(
     mode: SizeMode = Exact,
-    provider: LayoutContainer.() -> CFloat
+    provider: LayoutContainer.() -> Float
   ): AxisSolver
 }

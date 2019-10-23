@@ -33,12 +33,13 @@ import com.squareup.contour.solvers.SimpleAxisSolver.Point.Baseline
 import com.squareup.contour.solvers.SimpleAxisSolver.Point.Max
 import com.squareup.contour.solvers.SimpleAxisSolver.Point.Mid
 import com.squareup.contour.solvers.SimpleAxisSolver.Point.Min
-import com.squareup.contour.utils.toCInt
-import com.squareup.contour.utils.toCInt
+//import com.squareup.contour.utils.toInt
+//import com.squareup.contour.utils.toInt
 import com.squareup.contour.utils.unwrapIntLambda
-//import com.squareup.contour.utils.unwrapCIntToCIntLambda
-import com.squareup.contour.utils.unwrapCIntLambda
-//import com.squareup.contour.utils.unwrapCIntToCIntLambda
+import com.squareup.contour.utils.unwrapLayoutIntLambda
+//import com.squareup.contour.utils.unwrapIntToIntLambda
+import com.squareup.contour.utils.unwrapIntLambda
+//import com.squareup.contour.utils.unwrapIntToIntLambda
 import com.squareup.contour.wrappers.HasDimensions
 import com.squareup.contour.wrappers.ParentGeometry
 import com.squareup.contour.wrappers.ViewDimensions
@@ -93,8 +94,8 @@ private const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT
  *  any of its methods are called. The values returned by [parent] will be in the layuot's coordinate space, where
  *  0,0 is top-left and the layout width, height will be bottom-right.
  *
- *  An additional thing to note is all the [parent] methods return one of two types: [CInt] and [CInt].
- *  [CInt] and [CInt] represent a resolved layout value on it's corresponding axis, what this provides us is axis level
+ *  An additional thing to note is all the [parent] methods return one of two types: [Int] and [Int].
+ *  [Int] and [Int] represent a resolved layout value on it's corresponding axis, what this provides us is axis level
  *  type-safety. For example:
  *
  *     starDate.applyLayout(
@@ -102,14 +103,14 @@ private const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT
  *         topTo { parent.top() }
  *     )
  *
- *  Will not compile. [leftTo] requires an [CInt] and [top()] returns a [CInt]. The intention of this decision is to
+ *  Will not compile. [leftTo] requires an [Int] and [top()] returns a [Int]. The intention of this decision is to
  *  a) avoid accidentally configure against an point on the wrong axis.
  *  b) avoid accidentally referencing the virtual methods on [View] - [View.getLeft], [View.getTop], etc.
  *  The methods [View.getLeft], [View.getTop], etc. still work and return [Int] values in the context of contour, but
  *  do not provide the guarantee that the corresponding contour methods [View.left], [View.top], etc provide - which is
  *  they will always be laid out and valid by the time the function returns.
  *
- *  [CInt] and [CInt] are implemented as inline classes which means performance should be no different from using
+ *  [Int] and [Int] are implemented as inline classes which means performance should be no different from using
  *  regular [Int]s - and infact will compile down to native java [Int] primitives in most cases.
  *  More on inline classes: https://kotlinlang.org/docs/reference/inline-classes.html
  *
@@ -127,11 +128,11 @@ private const val WRAP = ViewGroup.LayoutParams.WRAP_CONTENT
  *  argument, will dynamically size the width (starDate will be as wide as the text dictates - up until the right edge
  *  reaches the parent.right() - when it will ellipsize). heightOf is simply hardcoded with heightOf { 50.ydip }.
  *  Something of note here is the scoped extension function [ydip] and the corresponding [xdip]. These unsurprisingly
- *  return Android DIP values as [CInt]/[CInt].
+ *  return Android DIP values as [Int]/[Int].
  *
  *  You can also use an scoped extension function plain-old [dip], which cannot be used directly with Resolvers
- *  ( widthOf { 10.dip } will not compile Int != CInt), but when combined with other functions doesn't require the
- *  explicitness of [xdip]/[ydip] eg: ( widthOf { parent.width() - 10.dip } *will* compile. (CInt + Int) == CInt)
+ *  ( widthOf { 10.dip } will not compile Int != Int), but when combined with other functions doesn't require the
+ *  explicitness of [xdip]/[ydip] eg: ( widthOf { parent.width() - 10.dip } *will* compile. (Int+ Int) == Int)
  *
  *  Finally, you can reference not only your parent in contour, but any sibling in the layout. So instead of aligning
  *  your left side with the [ContourLayout], you could inistead reference another view, we'll call avatar:
@@ -209,8 +210,8 @@ open class ContourLayout(
       val params = child.layoutParams as LayoutSpec
       child.measure(params.x.measureSpec(), params.y.measureSpec())
       child.layout(
-          params.left().value, params.top().value,
-          params.right().value, params.bottom().value
+          params.left(), params.top(),
+          params.right(), params.bottom()
       )
     }
   }
@@ -254,15 +255,15 @@ open class ContourLayout(
   open fun onInitializeLayout() {}
 
   val Int.dip: Int get() = (density * this).toInt()
-  val Int.xdip: CInt get() = CInt((density * this).toInt())
-  val Int.ydip: CInt get() = CInt((density * this).toInt())
+//  val Int.xdip: Intget() = Int((density * this).toInt())
+//  val Int.ydip: Intget() = Int((density * this).toInt())
 
   val Float.dip: Float get() = density * this
-  val Float.xdip: CFloat get() = CFloat(density * this)
-  val Float.ydip: CFloat get() = CFloat(density * this)
+//  val Float.xdip: CFloat get() = CFloat(density * this)
+//  val Float.ydip: CFloat get() = CFloat(density * this)
 
-//  inline fun Int.toCInt(): CInt = CInt(this)
-  inline fun Int.toCInt(): CInt = CInt(this)
+//  inline fun Int.toInt(): Int= Int(this)
+//  inline fun Int.toInt(): Int= Int(this)
 
   @Deprecated(
       "Views should be configured by overriding onInitializeLayout() in your ContourLayout " +
@@ -286,27 +287,27 @@ open class ContourLayout(
   /**
    * Overrides how the [ContourLayout] should size it's width. By default [ContourLayout] will take all the available
    * space it is given.
-   * @param config a function that takes a [CInt] - which is the available space supplied by the [ContourLayout]'s
-   * parent - and returns a [CInt] describing how wide the [ContourLayout] should be.
+   * @param config a function that takes a [Int] - which is the available space supplied by the [ContourLayout]'s
+   * parent - and returns a [Int] describing how wide the [ContourLayout] should be.
    *
    * Note: It is acceptable to reference the children views in the [config] so long as circular references are not
    * introduced!
    */
-  fun contourWidthOf(config: (available: CInt) -> CInt) {
-    widthConfig.lambda = unwrapCIntLambda(config)
+  fun contourWidthOf(config: (available: Int) -> Int) {
+    widthConfig.lambda = unwrapIntLambda(config)
   }
 
   /**
    * Overrides how the [ContourLayout] should size it's height. By default [ContourLayout] will take all the available
    * space it is given.
-   * @param config a function that takes a [CInt] - which is the available space supplied by the [ContourLayout]'s
-   * parent - and returns a [CInt] describing how tall the [ContourLayout] should be.
+   * @param config a function that takes a [Int] - which is the available space supplied by the [ContourLayout]'s
+   * parent - and returns a [Int] describing how tall the [ContourLayout] should be.
    *
    * Note: It is acceptable to reference the children views in the [config] so long as circular references are not
    * introduced!
    */
-  fun contourHeightOf(config: (available: CInt) -> CInt) {
-    heightConfig.lambda = unwrapCIntLambda(config)
+  fun contourHeightOf(config: (available: Int) -> Int) {
+    heightConfig.lambda = unwrapIntLambda(config)
   }
 
   /**
@@ -362,37 +363,37 @@ open class ContourLayout(
    * The left position of the receiver [View]. Guaranteed to return the resolved value or throw.
    * @return the laid-out left position of the [View]
    */
-  fun View.left(): CInt = handleCrd { spec().left() }
+  fun View.left(): Int= handleCrd { spec().left() }
 
   /**
    * The top position of the receiver [View]. Guaranteed to return the resolved value or throw.
    * @return the laid-out top position of the [View]
    */
-  fun View.top(): CInt = handleCrd { spec().top() }
+  fun View.top(): Int= handleCrd { spec().top() }
 
   /**
    * The right position of the receiver [View]. Guaranteed to return the resolved value or throw.
    * @return the laid-out right position of the [View]
    */
-  fun View.right(): CInt = handleCrd { spec().right() }
+  fun View.right(): Int= handleCrd { spec().right() }
 
   /**
    * The bottom position of the receiver [View]. Guaranteed to return the resolved value or throw.
    * @return the laid-out bottom position of the [View]
    */
-  fun View.bottom(): CInt = handleCrd { spec().bottom() }
+  fun View.bottom(): Int= handleCrd { spec().bottom() }
 
   /**
    * The center-x position of the receiver [View]. Guaranteed to return the resolved value or throw.
    * @return the laid-out left center-x of the [View]
    */
-  fun View.centerX(): CInt = handleCrd { spec().centerX() }
+  fun View.centerX(): Int= handleCrd { spec().centerX() }
 
   /**
    * The center-y position of the receiver [View]. Guaranteed to return the resolved value or throw.
    * @return the laid-out center-y position of the [View]
    */
-  fun View.centerY(): CInt = handleCrd { spec().centerY() }
+  fun View.centerY(): Int= handleCrd { spec().centerY() }
 
   /**
    * The baseline position of the receiver [View]. Guaranteed to return the resolved value or throw.
@@ -401,93 +402,93 @@ open class ContourLayout(
    * The baseline position will be 0 if the receiver [View] does not have a baseline. The most notable use of baseline
    * is in [TextView] which provides the baseline of the text.
    */
-  fun View.baseline(): CInt = handleCrd { spec().baseline() }
+  fun View.baseline(): Int= handleCrd { spec().baseline() }
 
   /**
    * The width of the receiver [View]. Guaranteed to return the resolved value or throw.
    * @return the laid-out width of the [View]
    */
-  fun View.width(): CInt = handleCrd { spec().width() }
+  fun View.width(): Int= handleCrd { spec().width() }
 
   /**
    * The height of the receiver [View]. Guaranteed to return the resolved value or throw.
    * @return the laid-out height of the [View]
    */
-  fun View.height(): CInt = handleCrd { spec().height() }
+  fun View.height(): Int= handleCrd { spec().height() }
 
   /**
    * The preferred width of the receiver [View] when no constraints are applied to the view.
    * @return the preferred width of the [View]
    */
-  fun View.preferredWidth(): CInt = handleCrd { spec().preferredWidth() }
+  fun View.preferredWidth(): Int= handleCrd { spec().preferredWidth() }
 
   /**
    * The preferred height of the receiver [View] when no constraints are applied to the view.
    * @return the preferred height of the [View]
    */
-  fun View.preferredHeight(): CInt = handleCrd { spec().preferredHeight() }
+  fun View.preferredHeight(): Int= handleCrd { spec().preferredHeight() }
 
-  fun baselineTo(provider: LayoutContainer.() -> CInt): HeightOfOnlyContext =
+  fun baselineTo(provider: LayoutContainer.() -> Int): HeightOfOnlyContext =
     SimpleAxisSolver(
         point = Baseline,
-        lambda = unwrapIntLambda(provider)
+        lambda = unwrapLayoutIntLambda(provider)
     )
 
-  fun topTo(provider: LayoutContainer.() -> CInt): HasTop =
+  fun topTo(provider: LayoutContainer.() -> Int): HasTop =
     SimpleAxisSolver(
         point = Min,
-        lambda = unwrapIntLambda(provider)
+        lambda = unwrapLayoutIntLambda(provider)
     )
 
-  fun bottomTo(provider: LayoutContainer.() -> CInt): HasBottom =
+  fun bottomTo(provider: LayoutContainer.() -> Int): HasBottom =
     SimpleAxisSolver(
         point = Max,
-        lambda = unwrapIntLambda(provider)
+        lambda = unwrapLayoutIntLambda(provider)
     )
 
-  fun centerVerticallyTo(provider: LayoutContainer.() -> CInt): HeightOfOnlyContext =
+  fun centerVerticallyTo(provider: LayoutContainer.() -> Int): HeightOfOnlyContext =
     SimpleAxisSolver(
         point = Mid,
-        lambda = unwrapIntLambda(provider)
+        lambda = unwrapLayoutIntLambda(provider)
     )
 
-  fun leftTo(provider: LayoutContainer.() -> CInt): HasLeft =
+  fun leftTo(provider: LayoutContainer.() -> Int): HasLeft =
     SimpleAxisSolver(
         point = Min,
-        lambda = unwrapIntLambda(provider)
+        lambda = unwrapLayoutIntLambda(provider)
     )
 
-  fun rightTo(provider: LayoutContainer.() -> CInt): HasRight =
+  fun rightTo(provider: LayoutContainer.() -> Int): HasRight =
     SimpleAxisSolver(
         point = Max,
-        lambda = unwrapIntLambda(provider)
+        lambda = unwrapLayoutIntLambda(provider)
     )
 
-  fun centerHorizontallyTo(provider: LayoutContainer.() -> CInt): WidthOfOnlyContext =
+  fun centerHorizontallyTo(provider: LayoutContainer.() -> Int): WidthOfOnlyContext =
     SimpleAxisSolver(
         point = Mid,
-        lambda = unwrapIntLambda(provider)
+        lambda = unwrapLayoutIntLambda(provider)
     )
 
 //  fun minOf(
-//    a: CInt,
-//    b: CInt
-//  ): CInt = min(a.value, b.value).toCInt()
+//    a: Int,
+//    b: Int
+//  ): Int= min(a.value, b.value).toInt()
 
   fun minOf(
-    a: CInt,
-    b: CInt
-  ): CInt = min(a.value, b.value).toCInt()
+    a: Int,
+    b: Int
+  ): Int= min(a, b).toInt()
 
 //  fun maxOf(
-//    a: CInt,
-//    b: CInt
-//  ): CInt = max(a.value, b.value).toCInt()
+//    a: Int,
+//    b: Int
+//  ): Int= max(a.value, b.value).toInt()
 
   fun maxOf(
-    a: CInt,
-    b: CInt
-  ): CInt = max(a.value, b.value).toCInt()
+    a: Int,
+    b: Int
+  ): Int= max(a, b).toInt()
 
   fun minOf(
     p0: HasYPositionWithoutHeight,
@@ -538,24 +539,24 @@ open class ContourLayout(
       y.onAttach(this)
     }
 
-    internal fun left(): CInt = x.min().toCInt()
-    internal fun right(): CInt = x.max().toCInt()
-    internal fun centerX(): CInt = x.mid().toCInt()
-    internal fun top(): CInt = y.min().toCInt()
-    internal fun bottom(): CInt = y.max().toCInt()
-    internal fun centerY(): CInt = y.mid().toCInt()
-    internal fun baseline(): CInt = y.baseline().toCInt()
-    internal fun width(): CInt = x.range().toCInt()
-    internal fun height(): CInt = y.range().toCInt()
+    internal fun left(): Int= x.min()
+    internal fun right(): Int= x.max()
+    internal fun centerX(): Int= x.mid()
+    internal fun top(): Int= y.min()
+    internal fun bottom(): Int= y.max()
+    internal fun centerY(): Int= y.mid()
+    internal fun baseline(): Int= y.baseline()
+    internal fun width(): Int= x.range()
+    internal fun height(): Int= y.range()
 
-    internal fun preferredWidth(): CInt {
+    internal fun preferredWidth(): Int{
       dimen.measure(0, y.measureSpec())
-      return dimen.width.toCInt()
+      return dimen.width
     }
 
-    internal fun preferredHeight(): CInt {
+    internal fun preferredHeight(): Int{
       dimen.measure(x.measureSpec(), 0)
-      return dimen.height.toCInt()
+      return dimen.height
     }
 
     internal fun measureSelf() {
